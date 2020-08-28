@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- vehicle model -->
+  <arg name="vehicle" default="iris"/>
+  <arg name="urdf" default="$(find mavros_nav_2d)/urdf/drone.urdf.xacro"/>
+  <arg name="rcS" default="$(find mavros_nav_2d)/config/$(arg vehicle)"/>
+  <arg name="rotation_speed" default="0.785398163"/>
+  <arg name="lidar_hz" default="20"/>
+  <arg name="fixed_velodyne" default="false"/>
+  <arg name="vertical_velodyne" default="false"/>
+  <arg name="x" default="0"/>
+  <arg name="y" default="0"/>
+  <arg name="z" default="0.01"/>
+  <arg name="yaw" default="0"/>
+  <!-- MAVROS configs -->
+  <arg name="fcu_url" default="udp://:14540@localhost:14557"/>
+  <arg name="respawn_mavros" default="false"/>
+  <!-- PX4 configs -->
+  <arg name="interactive" default="true"/>
+  <!-- PX4 SITL -->
+  <arg unless="$(arg interactive)" name="px4_command_arg1" value="-d"/>
+  <arg     if="$(arg interactive)" name="px4_command_arg1" value=""/>
+  <node name="sitl" pkg="px4" type="px4" output="screen"
+        args="$(find px4) $(arg rcS) $(arg px4_command_arg1)" required="true"/>
+
+  <!-- Spawn drone in gazebo -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg urdf)'" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_model" args="-urdf -param /robot_description -model drone -x $(arg x) -y $(arg y) -z $(arg z) -Y $(arg yaw)"/>
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="30.0" />
+  </node>
+
+   <!-- MAVROS -->
+  <include file="$(find mavros)/launch/node.launch">
+    <arg name="pluginlists_yaml" value="$(find mavros)/launch/px4_pluginlists.yaml" />
+    <arg name="config_yaml" value="$(find mavros_nav_2d)/config/px4_config.yaml" />
+
+    <arg name="fcu_url" value="$(arg fcu_url)" />
+    <arg name="gcs_url" value="" /> <!-- GCS link is provided by SITL -->
+    <arg name="tgt_system" value="1" />
+    <arg name="tgt_component" value="1" />
+    <arg name="log_output" value="screen" />
+    <arg name="fcu_protocol" value="v2.0" />
+    <arg name="respawn_mavros" default="$(arg respawn_mavros)" />
+  </include>
+
+  <!-- hack to get TF working in RVIZ for joints -->
+  <node pkg="tf" type="static_transform_publisher" name="base_link_imu"
+        args="0 0 0 0 0 0 base_link imu_link 100" />
+  <node pkg="tf" type="static_transform_publisher" name="base_link_rotor0"
+        args="0.13 -0.22 0.023 0 0 0 base_link rotor_0 100" />
+  <node pkg="tf" type="static_transform_publisher" name="base_link_rotor1"
+        args="-0.13 0.2 0.023 0 0 0 base_link rotor_1 100" />
+  <node pkg="tf" type="static_transform_publisher" name="base_link_rotor2"
+        args="0.13 0.22 0.023 0 0 0 base_link rotor_2 100" />
+  <node pkg="tf" type="static_transform_publisher" name="base_link_rotor3"
+        args="-0.13 -0.2 0.023 0 0 0 base_link rotor_3 100" />
+
+</launch>

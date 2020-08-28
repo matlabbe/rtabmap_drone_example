@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<launch>
+   
+    <node pkg="imu_complementary_filter" type="complementary_filter_node" name="imu_filter_node" output="screen">
+      <remap from="imu" to="body_imu"/>
+    </node> 
+    <node pkg="nodelet" type="nodelet" name="imu_to_tf" args="standalone rtabmap_ros/imu_to_tf">
+      <remap from="imu/data" to="/body_imu/data"/>
+      <param name="fixed_frame_id" value="base_link_stabilized"/>
+      <param name="base_frame_id" value="base_link"/>
+    </node>
+
+    <!-- VSLAM -->
+    <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
+      <arg name="args"              value="-d --Optimizer/GravitySigma 0.3 --Vis/FeatureType 10 --Kp/DetectorStrategy 10 --Grid/MapFrameProjection true --NormalsSegmentation false --Grid/MaxGroundHeight 1 --Grid/MaxObstacleHeight 2" /> 
+      <arg name="rtabmapviz"        value="true" /> 
+      <arg name="frame_id"          value="base_link" />
+      <arg name="odom_guess_frame_id" value="base_link_stabilized" />
+      <arg name="rgb_topic"         value="/r200/camera/color/image_raw" />
+      <arg name="depth_topic"       value="/r200/camera/depth/image_raw" />
+      <arg name="camera_info_topic" value="/r200/camera/color/camera_info" />
+      <arg name="imu_topic"         value="/body_imu/data"/>
+      <arg name="wait_imu_to_init"  value="true"/>
+      <arg name="approx_sync"       value="true"/>
+    </include>
+    
+    <!-- Costmap -->
+    <node pkg="nodelet" type="nodelet" name="camera_points_xyz" args="standalone rtabmap_ros/point_cloud_xyz">
+      <remap from="depth/image"       to="/r200/camera/depth/image_raw"/>
+      <remap from="depth/camera_info" to="/r200/camera/depth/camera_info"/>
+      <remap from="cloud"             to="camera_cloud" />
+
+      <param name="decimation"  type="double" value="4"/>
+      <param name="voxel_size"  type="double" value="0.0"/>
+      <param name="approx_sync" type="bool"   value="true"/>
+    </node> 
+
+    <!-- navigation -->  
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+       <remap from="map" to="/rtabmap/proj_map"/>  
+       <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />  
+       <rosparam file="$(find mavros_nav_2d)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+       <rosparam file="$(find mavros_nav_2d)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
+       <rosparam file="$(find mavros_nav_2d)/param/global_costmap_params.yaml" command="load" />
+       <rosparam file="$(find mavros_nav_2d)/param/local_costmap_params.yaml" command="load" />
+       <rosparam file="$(find mavros_nav_2d)/param/base_local_planner_params.yaml" command="load" />
+    </node>
+   <node name="empty_voxels_markers" pkg="rtabmap_ros" type="voxel_markers" args="voxel_grid:=/move_base/local_costmap/voxel_layer/voxel_grid visualization_marker:=/voxels_empty">
+       <param name="cell_type" value="0"/>
+   </node>
+   <node name="marked_voxels_markers" pkg="rtabmap_ros" type="voxel_markers" args="voxel_grid:=/move_base/local_costmap/voxel_layer/voxel_grid visualization_marker:=/voxels_marked" />
+
+    <!-- joystick -->
+    <rosparam file="$(find mavros_nav_2d)/config/joy_config.yaml" />
+    <node pkg="joy" type="joy_node" name="joy_node">
+        <param name="autorepeat_rate" value="5"/>
+    </node>
+    <node pkg="teleop_twist_joy" type="teleop_node" name="teleop_node" output="screen">
+        <param name="autorepeat_rate" value="5"/>
+    </node>
+</launch>

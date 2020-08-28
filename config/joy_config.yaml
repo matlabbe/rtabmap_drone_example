@@ -1,0 +1,15 @@
+# ps4
+teleop_node:
+    axis_linear:  # Forward/Back
+      x: 4
+      y: 3
+    scale_linear:
+      x: 1
+      y: 0.5
+
+    axis_angular:  # Turn Left/Right
+      yaw: 0
+    scale_angular:
+      yaw: 1
+
+    enable_button: 4  # Trigger
