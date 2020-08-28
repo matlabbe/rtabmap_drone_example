@@ -15,3 +15,4 @@ rosrun mavros_nav_2d offboard
 # Autonomous control: use "2D Nav Goal" button in RVIZ to set a goal to reach 
 
 ```
+![](https://raw.githubusercontent.com/matlabbe/mavros_nav_2d/master/doc/example.jpg)
