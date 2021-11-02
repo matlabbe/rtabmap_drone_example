@@ -13,7 +13,21 @@
 #include <mavros_msgs/PositionTarget.h>
 #include <tf/transform_listener.h>
 
-#define VELOCITY_CONTROL 0b011111000111
+/*
+uint16 IGNORE_PX=1
+uint16 IGNORE_PY=2
+uint16 IGNORE_PZ=4
+uint16 IGNORE_VX=8
+uint16 IGNORE_VY=16
+uint16 IGNORE_VZ=32
+uint16 IGNORE_AFX=64
+uint16 IGNORE_AFY=128
+uint16 IGNORE_AFZ=256
+uint16 FORCE=512
+uint16 IGNORE_YAW=1024
+uint16 IGNORE_YAW_RATE=2048
+*/
+#define VELOCITY_CONTROL 0b011111000011
 #define POSITION_CONTROL 0b101111111000
 
 mavros_msgs::PositionTarget current_goal;
@@ -31,9 +45,10 @@ void twist_cb(const geometry_msgs::Twist::ConstPtr& msg){
     }
     current_goal.coordinate_frame = mavros_msgs::PositionTarget::FRAME_BODY_NED;
     current_goal.type_mask = VELOCITY_CONTROL;
-    current_goal.velocity.x = -msg->linear.y;
-    current_goal.velocity.y = msg->linear.x;
+    current_goal.velocity.x = msg->linear.x;
+    current_goal.velocity.y = msg->linear.y;
     current_goal.velocity.z = 0;
+    current_goal.position.z = 1.5;
     current_goal.yaw_rate = msg->angular.z;
     lastTwistReceived = ros::Time::now();
 }
@@ -57,7 +72,7 @@ int main(int argc, char **argv)
             ("/cmd_vel", 1, twist_cb);
 
     //the setpoint publishing rate MUST be faster than 2Hz
-    ros::Rate rate(20.0);
+    ros::Rate rate(50.0);
 
     // wait for FCU connection
     while(ros::ok() && !current_state.connected){
@@ -91,6 +106,8 @@ int main(int argc, char **argv)
     tf::TransformListener listener;
 
     ROS_INFO("Setting offboard mode... (5 seconds)");
+    ros::spinOnce();
+    listener.waitForTransform("/map", "/base_link", ros::Time(0), ros::Duration(5));
     
     geometry_msgs::PoseStamped current_pose;
     current_pose.header.frame_id = "map";

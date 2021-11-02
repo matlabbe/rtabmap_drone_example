@@ -267,7 +267,7 @@
           <gaussianNoise>0.01</gaussianNoise>
           <xyzOffset>0 0 0</xyzOffset>
           <rpyOffset>0 0 0</rpyOffset>
-          <frameName>base_link</frameName>
+          <frameName>imu_body_link</frameName>
         </plugin>
       </sensor>
   </gazebo>
