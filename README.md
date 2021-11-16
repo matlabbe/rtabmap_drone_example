@@ -12,7 +12,7 @@ sudo apt install ros-noetic-rtabmap-ros ros-noetic-gazebo-dev
 cd ~
 git clone https://github.com/PX4/PX4-Autopilot.git
 cd PX4-Autopilot
-git checkout v1.11.3
+git checkout v1.12.3
 git submodule update --init --recursive
 sudo pip3 install numpy toml packaging jinja2 empy numpy
 make px4_sitl_default gazebo
