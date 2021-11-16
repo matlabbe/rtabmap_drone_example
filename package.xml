@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>mavros_nav_2d</name>
+  <name>rtabmap_drone_example</name>
   <version>0.0.0</version>
-  <description>The mavros_nav_2d package</description>
+  <description>The rtabmap_drone_example package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->

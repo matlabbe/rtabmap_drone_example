@@ -1,14 +1,14 @@
-# mavros_nav_2d
-Example of using move_base with mavros/px4 and rtabmap visual SLAM
+# rtabmap_drone_example
+2D navigation example of a drone using move_base with mavros/px4 and rtabmap visual SLAM. 
 
 ## Dependencies
 
-This following example has been tested on ROS Noetic. For ROS Melodic, checkout this tag: https://github.com/matlabbe/mavros_nav_2d/tree/px4_v1-8-2_mavros_v0-29-2
+This following example has been tested on ROS Noetic. For ROS Melodic, checkout this tag: https://github.com/matlabbe/rtabmap_drone_example/tree/px4_v1-8-2_mavros_v0-29-2
 
 ```bash
 sudo apt install ros-noetic-rtabmap-ros ros-noetic-gazebo-dev
 
-# PX4 (tested on version v1.11.3)
+# PX4 (tested on version v1.12.3)
 cd ~
 git clone https://github.com/PX4/PX4-Autopilot.git
 cd PX4-Autopilot
@@ -34,15 +34,15 @@ catkin_make
 ## Usage
 
 ```
-roslaunch mavros_nav_2d gazebo.launch
-roslaunch mavros_nav_2d slam.launch
-roslaunch mavros_nav_2d rviz.launch
+roslaunch rtabmap_drone_example gazebo.launch
+roslaunch rtabmap_drone_example slam.launch
+roslaunch rtabmap_drone_example rviz.launch
 
 # Arm and take off:
-rosrun mavros_nav_2d offboard
+rosrun rtabmap_drone_example offboard
 
 # Manual control: If a joystick is plugged, you can send twist by holding L1 and moving the joysticks
 # Autonomous control: use "2D Nav Goal" button in RVIZ to set a goal to reach 
 
 ```
-![](https://raw.githubusercontent.com/matlabbe/mavros_nav_2d/master/doc/example.jpg)
+![](https://raw.githubusercontent.com/matlabbe/rtabmap_drone_example/master/doc/example.jpg)

@@ -5,28 +5,25 @@
 # @type Quadrotor Wide
 #
 
-sh /etc/init.d-posix/10016_iris
+. ${R}etc/init.d-posix/airframes/10016_iris
 
-if [ $AUTOCNF = yes ]
-then
-	# EKF2: Vision position and heading
-	param set EKF2_AID_MASK 24
-	param set EKF2_EV_DELAY 200
-	
-	param set EKF2_HGT_MODE 3
-	param set EKF2_MAG_TYPE 5
-	param set EKF2_ASP_DELAY 50
-	param set EKF2_OF_DELAY 0
-	param set EKF2_MIN_OBS_DT 20
-	param set EKF2_EV_POS_X 0
-	param set EKF2_EV_POS_Y 0
-	param set EKF2_EV_POS_Z 0
-	param set EKF2_EVP_NOISE 0.1
-	param set EKF2_EVA_NOISE 0.05
+# EKF2: Vision position and heading
+param set-default EKF2_AID_MASK 24
+param set-default EKF2_EV_DELAY 200
 
-	# LPE: Vision + baro
-	param set LPE_FUSION 132
+param set-default EKF2_HGT_MODE 3
+param set-default EKF2_MAG_TYPE 5
+param set-default EKF2_ASP_DELAY 50
+param set-default EKF2_OF_DELAY 0
+param set-default EKF2_MIN_OBS_DT 20
+param set-default EKF2_EV_POS_X 0
+param set-default EKF2_EV_POS_Y 0
+param set-default EKF2_EV_POS_Z 0
+param set-default EKF2_EVP_NOISE 0.1
+param set-default EKF2_EVA_NOISE 0.05
 
-	# AEQ: External heading set to use vision input
-	param set ATT_EXT_HDG_M 1
-fi
+# LPE: Vision + baro
+param set-default LPE_FUSION 132
+
+# AEQ: External heading set to use vision input
+param set-default ATT_EXT_HDG_M 1

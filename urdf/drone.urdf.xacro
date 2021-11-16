@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="iris">
 
-  <xacro:include filename="$(find mavros_nav_2d)/urdf/drone.gazebo"/>
+  <xacro:include filename="$(find rtabmap_drone_example)/urdf/drone.gazebo"/>
+  <xacro:property name="scale" value="0.75" />
 
    <link name='base_link'>
       <inertial>
         <origin xyz="0 0 0" rpy="0 0 0"/>
-        <mass value="1.5"/>
+        <mass value="${1.5 * scale}"/>
         <inertia
 	  ixx="0.0347563" ixy="0.0" ixz="0.0"
 	  iyy="0.0458929" iyz="0.0"
@@ -15,7 +16,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <box size="0.47 0.47 0.11"/>
+          <box size="${0.47*scale} ${0.47*scale} ${0.11*scale}"/>
         </geometry>
         <!--surface>
           <contact>
@@ -32,7 +33,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://mavlink_sitl_gazebo/models/rotors_description/meshes/iris.stl"/>
+          <mesh scale="${scale} ${scale} ${scale}" filename="package://mavlink_sitl_gazebo/models/iris/meshes/iris.stl"/>
         </geometry>
         <!--material name="base_link_material">
           <script>
@@ -88,7 +89,7 @@
       <visual name='rotor_0_visual'>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://mavlink_sitl_gazebo/models/rotors_description/meshes/iris_prop_ccw.dae"/>
+          <mesh scale="${scale} ${scale} ${scale}" filename="package://mavlink_sitl_gazebo/models/iris/meshes/iris_prop_ccw.dae"/>
         </geometry>
         <!-- material>
           <script>
@@ -103,7 +104,7 @@
     <joint name='rotor_0_joint' type='revolute'>
       <parent link="base_link"/>
       <child link="rotor_0"/>
-      <origin xyz="0.13 -0.22 0.023" rpy="0 0 0"/>
+      <origin xyz="${scale*0.13} ${scale*-0.22} ${scale*0.023}" rpy="0 0 0"/>
       <axis xyz="0 0 1"/>
       <limit lower="-1e+16" upper="1e+16" effort="0" velocity="0"/>
     </joint>
@@ -133,7 +134,7 @@
       <visual name='rotor_1_visual'>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://mavlink_sitl_gazebo/models/rotors_description/meshes/iris_prop_ccw.dae"/>
+          <mesh scale="${scale} ${scale} ${scale}" filename="package://mavlink_sitl_gazebo/models/iris/meshes/iris_prop_ccw.dae"/>
         </geometry>
         <!-- material>
           <script>
@@ -148,7 +149,7 @@
     <joint name='rotor_1_joint' type='revolute'>
       <parent link="base_link"/>
       <child link="rotor_1"/>
-      <origin xyz="-0.13 0.2 0.023" rpy="0 0 0"/>
+      <origin xyz="${scale*-0.13} ${scale*0.2} ${scale*0.023}" rpy="0 0 0"/>
       <axis xyz="0 0 1"/>
       <limit lower="-1e+16" upper="1e+16" effort="0" velocity="0"/>
     </joint>
@@ -178,7 +179,7 @@
       <visual name='rotor_2_visual'>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://mavlink_sitl_gazebo/models/rotors_description/meshes/iris_prop_cw.dae"/>
+          <mesh scale="${scale} ${scale} ${scale}" filename="package://mavlink_sitl_gazebo/models/iris/meshes/iris_prop_cw.dae"/>
         </geometry>
         <!-- material>
           <script>
@@ -193,7 +194,7 @@
     <joint name='rotor_2_joint' type='revolute'>
       <parent link="base_link"/>
       <child link="rotor_2"/>
-      <origin xyz="0.13 0.22 0.023" rpy="0 0 0"/>
+      <origin xyz="${scale*0.13} ${scale*0.22} ${scale*0.023}" rpy="0 0 0"/>
       <axis xyz="0 0 1"/>
       <limit lower="-1e+16" upper="1e+16" effort="0" velocity="0"/>
     </joint>
@@ -223,7 +224,7 @@
       <visual name='rotor_3_visual'>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://mavlink_sitl_gazebo/models/rotors_description/meshes/iris_prop_cw.dae"/>
+          <mesh scale="${scale} ${scale} ${scale}" filename="package://mavlink_sitl_gazebo/models/iris/meshes/iris_prop_cw.dae"/>
         </geometry>
         <!-- material>
           <script>
@@ -238,7 +239,7 @@
     <joint name='rotor_3_joint' type='revolute'>
       <parent link="base_link"/>
       <child link="rotor_3"/>
-      <origin xyz="-0.13 -0.2 0.023" rpy="0 0 0"/>
+      <origin xyz="${scale*-0.13} ${scale*-0.2} ${scale*0.023}" rpy="0 0 0"/>
       <axis xyz="0 0 1"/>
       <limit lower="-1e+16" upper="1e+16" effort="0" velocity="0"/>
     </joint>
@@ -274,10 +275,10 @@
 
 
   <!-- Import macro for realsense-RS200 camera-->
-  <xacro:include filename="$(find mavros_nav_2d)/urdf/realsense-RS200.macro.xacro"/>
+  <xacro:include filename="$(find rtabmap_drone_example)/urdf/realsense-RS200.macro.xacro"/>
     
   <joint name="base_camera_joint" type="fixed">
-    <origin xyz="0.1 0 0" rpy="0 0 0" /> 
+    <origin xyz="${scale*0.1} 0 0" rpy="0 0 0" /> 
     <parent link="base_link"/>
     <child link="base_camera" />
   </joint>

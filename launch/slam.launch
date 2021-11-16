@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <launch>
    
+    <arg name="localization" default="false"/>
+    
+    <arg     if="$(arg localization)" name="pre_args" default=""/>
+    <arg unless="$(arg localization)" name="pre_args" default="-d"/>
+   
     <node pkg="imu_complementary_filter" type="complementary_filter_node" name="imu_filter_node" output="screen">
       <remap from="imu" to="body_imu"/>
     </node> 
@@ -10,9 +15,14 @@
       <param name="base_frame_id" value="base_link"/>
     </node>
 
+    <!-- To connect rtabmap planning stuff with move_base below -->
+    <param name="/rtabmap/rtabmap/use_action_for_goal" value="true"/>
+    <remap from="/rtabmap/move_base" to="/move_base"/>
+
     <!-- VSLAM -->
     <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
-      <arg name="args"              value="-d --Optimizer/GravitySigma 0.3 --Vis/FeatureType 10 --Kp/DetectorStrategy 10 --Grid/MapFrameProjection true --NormalsSegmentation false --Grid/MaxGroundHeight 1 --Grid/MaxObstacleHeight 2" /> 
+      <arg name="localization"      value="$(arg localization)"/>
+      <arg name="args"              value="$(arg pre_args) --Optimizer/GravitySigma 0.3 --Vis/FeatureType 10 --Kp/DetectorStrategy 10 --Grid/MapFrameProjection true --NormalsSegmentation false --Grid/MaxGroundHeight 1 --Grid/MaxObstacleHeight 1.6" /> 
       <arg name="rtabmapviz"        value="true" /> 
       <arg name="frame_id"          value="base_link" />
       <arg name="odom_guess_frame_id" value="base_link_stabilized" />
@@ -39,11 +49,11 @@
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
        <remap from="map" to="/rtabmap/proj_map"/>  
        <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />  
-       <rosparam file="$(find mavros_nav_2d)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
-       <rosparam file="$(find mavros_nav_2d)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
-       <rosparam file="$(find mavros_nav_2d)/param/global_costmap_params.yaml" command="load" />
-       <rosparam file="$(find mavros_nav_2d)/param/local_costmap_params.yaml" command="load" />
-       <rosparam file="$(find mavros_nav_2d)/param/base_local_planner_params.yaml" command="load" />
+       <rosparam file="$(find rtabmap_drone_example)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+       <rosparam file="$(find rtabmap_drone_example)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
+       <rosparam file="$(find rtabmap_drone_example)/param/global_costmap_params.yaml" command="load" />
+       <rosparam file="$(find rtabmap_drone_example)/param/local_costmap_params.yaml" command="load" />
+       <rosparam file="$(find rtabmap_drone_example)/param/base_local_planner_params.yaml" command="load" />
     </node>
    <node name="empty_voxels_markers" pkg="rtabmap_ros" type="voxel_markers" args="voxel_grid:=/move_base/local_costmap/voxel_layer/voxel_grid visualization_marker:=/voxels_empty">
        <param name="cell_type" value="0"/>
@@ -51,7 +61,7 @@
    <node name="marked_voxels_markers" pkg="rtabmap_ros" type="voxel_markers" args="voxel_grid:=/move_base/local_costmap/voxel_layer/voxel_grid visualization_marker:=/voxels_marked" />
 
     <!-- joystick -->
-    <rosparam file="$(find mavros_nav_2d)/config/joy_config.yaml" />
+    <rosparam file="$(find rtabmap_drone_example)/config/joy_config.yaml" />
     <node pkg="joy" type="joy_node" name="joy_node">
         <param name="autorepeat_rate" value="5"/>
     </node>

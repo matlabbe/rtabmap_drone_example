@@ -12,7 +12,7 @@
     </include>
     <include>
       <uri>model://room</uri>
-      <pose>0.5 -2.5 1.5 0 0 1.15</pose>
+      <pose>0.5 -2.5 1.52 0 0 1.15</pose>
     </include>
 
     <model name="ground_plane_small">

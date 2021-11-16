@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(mavros_nav_2d)
+project(rtabmap_drone_example)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -107,7 +107,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES mavros_nav_2d
+#  LIBRARIES rtabmap_drone_example
 #  CATKIN_DEPENDS mavros move_base roscpp rospy rtabmap_ros std_msgs geometry_msgs
 #  DEPENDS system_lib
 )
@@ -125,7 +125,7 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/mavros_nav_2d.cpp
+#   src/${PROJECT_NAME}/rtabmap_drone_example.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -136,12 +136,12 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/mavros_nav_2d_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/rtabmap_drone_example_node.cpp)
 
-add_executable(mavros_nav_offboard src/offboard_node.cpp)
-#add_dependencies(mavros_nav_offboard ${${PROJECT_NAME}_EXPORTED_TARGETS})
-target_link_libraries(mavros_nav_offboard ${catkin_LIBRARIES})
-set_target_properties(mavros_nav_offboard PROPERTIES OUTPUT_NAME "offboard")
+add_executable(rtabmap_drone_example_offboard src/offboard_node.cpp)
+#add_dependencies(rtabmap_drone_example_offboard ${${PROJECT_NAME}_EXPORTED_TARGETS})
+target_link_libraries(rtabmap_drone_example_offboard ${catkin_LIBRARIES})
+set_target_properties(rtabmap_drone_example_offboard PROPERTIES OUTPUT_NAME "offboard")
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -205,7 +205,7 @@ set_target_properties(mavros_nav_offboard PROPERTIES OUTPUT_NAME "offboard")
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_mavros_nav_2d.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_rtabmap_drone_example.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
