@@ -12,6 +12,7 @@
   <arg name="lidar_hz" default="20"/>
   <arg name="fixed_velodyne" default="false"/>
   <arg name="vertical_velodyne" default="false"/>
+  <arg name="scale" default="0.75"/>
   <arg name="x" default="0"/>
   <arg name="y" default="0"/>
   <arg name="z" default="0.01"/>
@@ -28,7 +29,7 @@
         args="$(find px4)/build/px4_sitl_default/etc -s $(arg rcS) $(arg px4_command_arg1)" required="true"/>
 
   <!-- Spawn drone in gazebo -->
-  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg urdf)'" />
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg urdf)' scale:=$(arg scale)" />
   <node pkg="gazebo_ros" type="spawn_model" name="spawn_model" args="-urdf -param /robot_description -model drone -x $(arg x) -y $(arg y) -z $(arg z) -Y $(arg yaw)"/>
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
     <param name="publish_frequency" type="double" value="30.0" />
@@ -51,13 +52,17 @@
   <!-- hack to get TF working in RVIZ for joints -->
   <node pkg="tf" type="static_transform_publisher" name="base_link_imu"
         args="0 0 0 0 0 0 base_link imu_link 100" />
+  <arg name="s13" value="$(eval 0.13*scale)"/>
+  <arg name="s2" value="$(eval 0.2*scale)"/>
+  <arg name="s22" value="$(eval 0.22*scale)"/>
+  <arg name="s023" value="$(eval 0.023*scale)"/>
   <node pkg="tf" type="static_transform_publisher" name="base_link_rotor0"
-        args="0.13 -0.22 0.023 0 0 0 base_link rotor_0 100" />
+        args="$(arg s13) -$(arg s2) $(arg s023) 0 0 0 base_link rotor_0 100" />
   <node pkg="tf" type="static_transform_publisher" name="base_link_rotor1"
-        args="-0.13 0.2 0.023 0 0 0 base_link rotor_1 100" />
+        args="-$(arg s13) $(arg s22) $(arg s023) 0 0 0 base_link rotor_1 100" />
   <node pkg="tf" type="static_transform_publisher" name="base_link_rotor2"
-        args="0.13 0.22 0.023 0 0 0 base_link rotor_2 100" />
+        args="$(arg s13) $(arg s22) $(arg s023) 0 0 0 base_link rotor_2 100" />
   <node pkg="tf" type="static_transform_publisher" name="base_link_rotor3"
-        args="-0.13 -0.2 0.023 0 0 0 base_link rotor_3 100" />
+        args="-$(arg s13) -$(arg s2) $(arg s023) 0 0 0 base_link rotor_3 100" />
 
 </launch>

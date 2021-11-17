@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="iris">
 
+  <xacro:arg name="scale" default="0.75"/>
+  <xacro:property name="scale" value="$(arg scale)" />
   <xacro:include filename="$(find rtabmap_drone_example)/urdf/drone.gazebo"/>
-  <xacro:property name="scale" value="0.75" />
 
    <link name='base_link'>
       <inertial>
