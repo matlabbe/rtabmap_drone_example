@@ -1,6 +1,10 @@
 # rtabmap_drone_example
 2D navigation example of a drone using move_base with mavros/px4 and rtabmap visual SLAM. 
 
+Overview video:
+
+[![Youtube](https://img.youtube.com/vi/mFaOVYlaedg/0.jpg)](https://youtu.be/mFaOVYlaedg)
+
 ## Dependencies
 
 This following example has been tested on ROS Noetic. For ROS Melodic, checkout this tag: https://github.com/matlabbe/rtabmap_drone_example/tree/px4_v1-8-2_mavros_v0-29-2
