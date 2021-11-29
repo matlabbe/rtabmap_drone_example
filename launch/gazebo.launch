@@ -6,7 +6,7 @@
     <arg name="verbose" default="false"/>
     <arg name="paused" default="false"/>
     <arg name="respawn_gazebo" default="false"/>
-    <arg name="world_name" default="room"/> <!-- apartment, room -->
+    <arg name="world_name" default="apt"/> <!-- apt, room -->
     <arg name="world" default="$(find rtabmap_drone_example)/worlds/$(arg world_name).world"/>
     <arg name="fixed_velodyne" default="false"/>
     <arg name="vertical_velodyne" default="false"/>

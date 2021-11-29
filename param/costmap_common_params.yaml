@@ -1,11 +1,11 @@
 obstacle_range: 3.0
 raytrace_range: 3.5
-footprint: [[ 0.25,  0.25], [-0.25,  0.25], [-0.25, -0.25], [ 0.25, -0.25]]
-footprint_padding: 0.03
-inflation_radius: 0.55
+footprint: [[0.16,0.16], [-0.16,0.16], [-0.16,-0.16], [0.16,-0.16]]
+robot_radius: 0.32
+footprint_padding: 0.05
+cost_scaling_factor: 2
+inflation_radius: 2
+inflate_unkown: true
 transform_tolerance: 1
 
 controller_patience: 2.0
-
-NavfnROS:
-    allow_unknown: true

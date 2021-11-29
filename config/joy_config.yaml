@@ -3,9 +3,11 @@ teleop_node:
     axis_linear:  # Forward/Back
       x: 4
       y: 3
+      z: 1
     scale_linear:
       x: 1
       y: 0.5
+      z: 1
 
     axis_angular:  # Turn Left/Right
       yaw: 0

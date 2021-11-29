@@ -2,6 +2,7 @@
 <launch>
    
     <arg name="localization" default="false"/>
+    <arg name="rtabmapviz"   default="true"/>
     
     <arg     if="$(arg localization)" name="pre_args" default=""/>
     <arg unless="$(arg localization)" name="pre_args" default="-d"/>
@@ -22,8 +23,8 @@
     <!-- VSLAM -->
     <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
       <arg name="localization"      value="$(arg localization)"/>
-      <arg name="args"              value="$(arg pre_args) --Optimizer/GravitySigma 0.3 --Vis/FeatureType 10 --Kp/DetectorStrategy 10 --Grid/MapFrameProjection true --NormalsSegmentation false --Grid/MaxGroundHeight 1 --Grid/MaxObstacleHeight 1.6" /> 
-      <arg name="rtabmapviz"        value="true" /> 
+      <arg name="args"              value="$(arg pre_args) --Optimizer/GravitySigma 0.1 --Vis/FeatureType 10 --Kp/DetectorStrategy 10 --Grid/MapFrameProjection true --NormalsSegmentation false --Grid/MaxGroundHeight 1 --Grid/MaxObstacleHeight 1.6" /> 
+      <arg name="rtabmapviz"        value="$(arg rtabmapviz)" /> 
       <arg name="frame_id"          value="base_link" />
       <arg name="odom_guess_frame_id" value="base_link_stabilized" />
       <arg name="rgb_topic"         value="/r200/camera/color/image_raw" />
@@ -47,7 +48,8 @@
 
     <!-- navigation -->  
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-       <remap from="map" to="/rtabmap/proj_map"/>  
+       <remap from="map" to="/rtabmap/proj_map"/>
+       <remap from="odom" to="/rtabmap/odom"/>
        <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />  
        <rosparam file="$(find rtabmap_drone_example)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
        <rosparam file="$(find rtabmap_drone_example)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />

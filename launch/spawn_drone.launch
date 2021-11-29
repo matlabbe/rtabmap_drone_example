@@ -8,11 +8,7 @@
   <arg name="rcS" default="$(find rtabmap_drone_example)/config/rcS"/>
   <env name="PX4_SIM_MODEL" value="$(arg vehicle)" />
   <env name="PX4_ESTIMATOR" value="$(arg est)" />
-  <arg name="rotation_speed" default="0.785398163"/>
-  <arg name="lidar_hz" default="20"/>
-  <arg name="fixed_velodyne" default="false"/>
-  <arg name="vertical_velodyne" default="false"/>
-  <arg name="scale" default="0.75"/>
+  <arg name="scale" default="0.6"/>
   <arg name="x" default="0"/>
   <arg name="y" default="0"/>
   <arg name="z" default="0.01"/>
@@ -52,17 +48,7 @@
   <!-- hack to get TF working in RVIZ for joints -->
   <node pkg="tf" type="static_transform_publisher" name="base_link_imu"
         args="0 0 0 0 0 0 base_link imu_link 100" />
-  <arg name="s13" value="$(eval 0.13*scale)"/>
-  <arg name="s2" value="$(eval 0.2*scale)"/>
-  <arg name="s22" value="$(eval 0.22*scale)"/>
-  <arg name="s023" value="$(eval 0.023*scale)"/>
-  <node pkg="tf" type="static_transform_publisher" name="base_link_rotor0"
-        args="$(arg s13) -$(arg s2) $(arg s023) 0 0 0 base_link rotor_0 100" />
-  <node pkg="tf" type="static_transform_publisher" name="base_link_rotor1"
-        args="-$(arg s13) $(arg s22) $(arg s023) 0 0 0 base_link rotor_1 100" />
-  <node pkg="tf" type="static_transform_publisher" name="base_link_rotor2"
-        args="$(arg s13) $(arg s22) $(arg s023) 0 0 0 base_link rotor_2 100" />
-  <node pkg="tf" type="static_transform_publisher" name="base_link_rotor3"
-        args="-$(arg s13) -$(arg s2) $(arg s023) 0 0 0 base_link rotor_3 100" />
-
+  <node pkg="rtabmap_drone_example" type="rotor_tf.py" name="rotor_tf">
+     <param name="scale" value="$(arg scale)"/>
+  </node>
 </launch>
