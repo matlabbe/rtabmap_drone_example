@@ -3,17 +3,17 @@ DWAPlannerROS:
   global_frame_id: odom
 
 # Robot Configuration Parameters
-  max_vel_x: 0.25
+  max_vel_x: 0.2
   min_vel_x: -0.01
 
-  max_vel_y: 0.25
-  min_vel_y: -0.25
+  max_vel_y: 0.1
+  min_vel_y: -0.1
 
 # The velocity when robot is moving in a straight line
-  max_vel_trans:  0.25
+  max_vel_trans:  0.2
   min_vel_trans:  0.01
 
-  max_vel_theta: 2
+  max_vel_theta: 1
   min_vel_theta: 0
 
   acc_lim_x: 1.5
@@ -55,4 +55,4 @@ controller_frequency: 10.0
 planner_frequency: 1
 
 NavfnROS:
-  allow_unknown: true
+  allow_unknown: false
