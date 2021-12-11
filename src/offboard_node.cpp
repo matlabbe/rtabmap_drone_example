@@ -59,6 +59,7 @@ void twist_cb(const geometry_msgs::Twist::ConstPtr& msg){
 	current_goal.velocity.z = velocity_mask == VELOCITY2D_CONTROL?0:msg->linear.z;
 	current_goal.position.z = 1.5;
 	current_goal.yaw_rate = msg->angular.z;
+	current_goal.yaw_rate = msg->angular.z;
 	lastTwistReceived = ros::Time::now();
 }
 
@@ -140,6 +141,13 @@ int main(int argc, char **argv)
 		current_goal.position.y = visionPoseTf.getOrigin().y();
 		current_goal.position.z = 1.5;
 		current_goal.yaw = tf::getYaw(visionPoseTf.getRotation());
+		current_goal.velocity.x = 0;
+		current_goal.velocity.y = 0;
+		current_goal.velocity.z = 0;
+		current_goal.yaw_rate = 0;
+		current_goal.acceleration_or_force.x = 0;
+		current_goal.acceleration_or_force.y = 0;
+		current_goal.acceleration_or_force.z = 0;
 		ROS_INFO("Initial position=(%f,%f,%f) yaw=%f",
 				current_goal.position.x,
 				current_goal.position.y,
