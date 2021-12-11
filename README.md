@@ -7,10 +7,21 @@ Overview video:
 
 ## Dependencies
 
-Tested on ROS Melodic and ROS Noetic with the correpsonding PX4 versions below.
+Tested on ROS Melodic and ROS Noetic with the corresponding PX4 versions below.
 
 ```bash
-sudo apt install ros-$ROS_DISTRO-rtabmap-ros ros-$ROS_DISTRO-gazebo-dev ros-$ROS_DISTRO-joy ros-$ROS_DISTRO-imu-complementary-filter ros-$ROS_DISTRO-teleop-twist-joy ros-$ROS_DISTRO-geographic-msgs ros-$ROS_DISTRO-dwa-local-planner libgeographic-dev geographiclib-tools
+sudo apt install \
+   ros-$ROS_DISTRO-gazebo-dev \
+   ros-$ROS_DISTRO-joy \
+   ros-$ROS_DISTRO-imu-complementary-filter \
+   ros-$ROS_DISTRO-teleop-twist-joy \
+   ros-$ROS_DISTRO-geographic-msgs \
+   ros-$ROS_DISTRO-dwa-local-planner \
+   libgeographic-dev \
+   geographiclib-tools
+   
+# If rtabmap is not already built from source:
+sudo apt install ros-$ROS_DISTRO-rtabmap-ros
 ```
 
 ### PX4 v1.12.3 (Noetic)
