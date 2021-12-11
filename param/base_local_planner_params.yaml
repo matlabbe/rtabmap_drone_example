@@ -55,4 +55,4 @@ controller_frequency: 10.0
 planner_frequency: 1
 
 NavfnROS:
-  allow_unknown: false
+  allow_unknown: true

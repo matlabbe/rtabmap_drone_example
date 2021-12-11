@@ -2,7 +2,9 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="iris">
 
   <xacro:arg name="scale" default="0.75"/>
+  <xacro:arg name="stl_path" default="mavlink_sitl_gazebo/models/iris/meshes"/>
   <xacro:property name="scale" value="$(arg scale)" />
+  <xacro:property name="stl_path" value="$(arg stl_path)" />
   <xacro:include filename="$(find rtabmap_drone_example)/urdf/drone.gazebo"/>
 
    <link name='base_link'>
@@ -34,7 +36,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh scale="${scale} ${scale} ${scale}" filename="package://mavlink_sitl_gazebo/models/iris/meshes/iris.stl"/>
+          <mesh scale="${scale} ${scale} ${scale}" filename="package://${stl_path}/iris.stl"/>
         </geometry>
         <!--material name="base_link_material">
           <script>
@@ -90,7 +92,7 @@
       <visual name='rotor_0_visual'>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh scale="${scale} ${scale} ${scale}" filename="package://mavlink_sitl_gazebo/models/iris/meshes/iris_prop_ccw.dae"/>
+          <mesh scale="${scale} ${scale} ${scale}" filename="package://${stl_path}/iris_prop_ccw.dae"/>
         </geometry>
         <!-- material>
           <script>
@@ -135,7 +137,7 @@
       <visual name='rotor_1_visual'>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh scale="${scale} ${scale} ${scale}" filename="package://mavlink_sitl_gazebo/models/iris/meshes/iris_prop_ccw.dae"/>
+          <mesh scale="${scale} ${scale} ${scale}" filename="package://${stl_path}/iris_prop_ccw.dae"/>
         </geometry>
         <!-- material>
           <script>
@@ -180,7 +182,7 @@
       <visual name='rotor_2_visual'>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh scale="${scale} ${scale} ${scale}" filename="package://mavlink_sitl_gazebo/models/iris/meshes/iris_prop_cw.dae"/>
+          <mesh scale="${scale} ${scale} ${scale}" filename="package://${stl_path}/iris_prop_cw.dae"/>
         </geometry>
         <!-- material>
           <script>
@@ -225,7 +227,7 @@
       <visual name='rotor_3_visual'>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh scale="${scale} ${scale} ${scale}" filename="package://mavlink_sitl_gazebo/models/iris/meshes/iris_prop_cw.dae"/>
+          <mesh scale="${scale} ${scale} ${scale}" filename="package://${stl_path}/iris_prop_cw.dae"/>
         </geometry>
         <!-- material>
           <script>

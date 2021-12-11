@@ -49,8 +49,13 @@ void twist_cb(const geometry_msgs::Twist::ConstPtr& msg){
 	}
 	current_goal.coordinate_frame = mavros_msgs::PositionTarget::FRAME_BODY_NED;
 	current_goal.type_mask = velocity_mask;
+#ifdef MELODIC // Controls are switched
+	current_goal.velocity.x = -msg->linear.y;
+	current_goal.velocity.y = msg->linear.x;
+#else
 	current_goal.velocity.x = msg->linear.x;
 	current_goal.velocity.y = msg->linear.y;
+#endif
 	current_goal.velocity.z = velocity_mask == VELOCITY2D_CONTROL?0:msg->linear.z;
 	current_goal.position.z = 1.5;
 	current_goal.yaw_rate = msg->angular.z;

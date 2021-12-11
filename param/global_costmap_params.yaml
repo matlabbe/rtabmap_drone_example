@@ -4,6 +4,7 @@ global_costmap:
   update_frequency: 1
   publish_frequency: 1
   static_map: true
+  footprint_padding: 0.1
 
   plugins:
     - {name: static_layer,    type: "rtabmap_ros::StaticLayer"}
