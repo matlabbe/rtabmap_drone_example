@@ -21,6 +21,7 @@
     <remap from="/rtabmap/move_base" to="/move_base"/>
 
     <!-- VSLAM -->
+    <param name="/rtabmap/rtabmap/latch" value="false"/> <!-- For some reason, if we latch grid_map, the global costmap inflation layer will create holes on robot path. To avoid holes, republish grid_map on each update (latching disabled). -->
     <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
       <arg name="localization"      value="$(arg localization)"/>
       <arg name="args"              value="$(arg pre_args) --Optimizer/GravitySigma 0.1 --Vis/FeatureType 10 --Kp/DetectorStrategy 10 --Grid/MapFrameProjection true --NormalsSegmentation false --Grid/MaxGroundHeight 1 --Grid/MaxObstacleHeight 1.6" /> 
@@ -48,7 +49,7 @@
 
     <!-- navigation -->  
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-       <remap from="map" to="/rtabmap/proj_map"/>
+       <remap from="map" to="/rtabmap/grid_map"/>
        <remap from="odom" to="/rtabmap/odom"/>
        <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />  
        <rosparam file="$(find rtabmap_drone_example)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
