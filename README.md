@@ -18,13 +18,18 @@ sudo apt install \
    ros-$ROS_DISTRO-geographic-msgs \
    ros-$ROS_DISTRO-dwa-local-planner \
    libgeographic-dev \
-   geographiclib-tools
+   geographiclib-tools \
+   libgstreamer1.0-dev
+
+# May need this on Melodic to avoid error about silt_gazebo 
+# and gstreamer (https://github.com/PX4/PX4-Autopilot/issues/13117):
+sudo apt-get install libgstreamer-plugins-base1.0-dev
    
 # If rtabmap is not already built from source:
 sudo apt install ros-$ROS_DISTRO-rtabmap-ros
 ```
 
-### PX4 v1.12.3 (Noetic)
+### PX4 v1.12.3
 ```bash
 cd ~
 git clone https://github.com/PX4/PX4-Autopilot.git
@@ -49,49 +54,6 @@ sudo ~/catkin_ws/src/mavros/mavros/scripts/install_geographiclib_datasets.sh
 cd ~/catkin_ws
 catkin_make
 ```
-
-### PX4 v1.8.2 (Melodic)
-```bash
-cd ~
-git clone https://github.com/PX4/PX4-Autopilot.git
-cd PX4-Autopilot
-git checkout v1.8.2
-git submodule update --init --recursive
-sudo apt install python-pip
-sudo pip install numpy toml
-make posix_sitl_default gazebo
-# (do ctrl-c in terminal to close gazebo)
-echo "source ~/PX4-Autopilot/Tools/setup_gazebo.bash ~/PX4-Autopilot ~/PX4-Autopilot/build/posix_sitl_default" >> ~/.bashrc
-echo "export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:~/PX4-Autopilot:~/PX4-Autopilot/Tools/sitl_gazebo" >> ~/.bashrc
-source ~/.bashrc
-
-# To work with mavros 0.29.2, we need mavlink 3.3.1 under melodic
-cd ~
-wget https://github.com/mavlink/mavlink-gbp-release/archive/release/melodic/mavlink/2020.3.3-1.zip
-unzip 2020.3.3-1.zip
-cd mavlink-gbp-release-release-melodic-mavlink-2020.3.3-1
-mkdir build
-cd build
-sudo apt install libxslt1-dev
-pip install -U future lxml
-cmake ..
-make -j4
-sudo make install
-
-cd ~/catkin_ws/src
-# To work with PX4/Firmware 1.8.2, we need mavros 0.29.2
-git clone https://github.com/mavlink/mavros.git && cd mavros && git checkout 0.29.2 && cd ..
-git clone https://github.com/SyrianSpock/realsense_gazebo_plugin.git
-
-sudo ~/catkin_ws/src/mavros/mavros/scripts/install_geographiclib_datasets.sh
-
-cd ~/catkin_ws
-catkin_make
-
-```
-
-#### Issue with PX4 v1.8.2
-* With melodic version, PX4 will always lose track of the altitude in the first 5 minutes of the simulation. We have to manually with L1-L2 increase back the altitude of the drone a couple of times until PX4 restarts to correctly adjust the altitude to our setpoint (1.5m). It seems that issue won't re-happen another time during the same simulation (tested at least 20 min after the issue). The bug can be seen at 3:56 in the overview video.
 
 ## Usage
 

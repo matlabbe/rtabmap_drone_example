@@ -1,18 +1,13 @@
 <?xml version="1.0"?>
 <launch>
 
-  <arg name="distro" value="$(env ROS_DISTRO)"/>
-  <arg name="melodic" value="$(eval distro == 'melodic')"/>
-
   <!-- vehicle model -->
   <arg name="est" default="ekf2"/>
-  <arg     if="$(arg melodic)" name="vehicle" default="iris"/>
-  <arg unless="$(arg melodic)" name="vehicle" default="iris_rtabmap"/>
+  <arg name="vehicle" default="iris_rtabmap"/>
   <arg name="urdf" default="$(find rtabmap_drone_example)/urdf/drone.urdf.xacro"/>
-  <arg     if="$(arg melodic)" name="rcS" default="$(find rtabmap_drone_example)/config/$(arg vehicle)"/>
-  <arg unless="$(arg melodic)" name="rcS" default="$(find rtabmap_drone_example)/config/rcS"/>
-  <env unless="$(arg melodic)" name="PX4_SIM_MODEL" value="$(arg vehicle)" />
-  <env unless="$(arg melodic)" name="PX4_ESTIMATOR" value="$(arg est)" />
+  <arg name="rcS" default="$(find rtabmap_drone_example)/config/rcS"/>
+  <env name="PX4_SIM_MODEL" value="$(arg vehicle)" />
+  <env name="PX4_ESTIMATOR" value="$(arg est)" />
   <arg name="scale" default="0.6"/>
   <arg name="x" default="0"/>
   <arg name="y" default="0"/>
@@ -26,14 +21,11 @@
   <!-- PX4 SITL -->
   <arg     if="$(arg interactive)" name="px4_command_arg1" value=""/>
   <arg unless="$(arg interactive)" name="px4_command_arg1" value="-d"/>
-  <node     if="$(arg melodic)" name="sitl" pkg="px4" type="px4" output="screen"
-        args="$(find px4) $(arg rcS) $(arg px4_command_arg1)" required="true"/>
-  <node unless="$(arg melodic)" name="sitl" pkg="px4" type="px4" output="screen"
+  <node name="sitl" pkg="px4" type="px4" output="screen"
         args="$(find px4)/build/px4_sitl_default/etc -s $(arg rcS) $(arg px4_command_arg1)" required="true"/>
 
   <!-- Spawn drone in gazebo -->
-  <arg     if="$(arg melodic)" name="stl_path" value="mavlink_sitl_gazebo/models/rotors_description/meshes"/>
-  <arg unless="$(arg melodic)" name="stl_path" value="mavlink_sitl_gazebo/models/iris/meshes"/>
+  <arg name="stl_path" value="mavlink_sitl_gazebo/models/iris/meshes"/>
   <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg urdf)' scale:=$(arg scale) stl_path:=$(arg stl_path)" />
   <node pkg="gazebo_ros" type="spawn_model" name="spawn_model" args="-urdf -param /robot_description -model drone -x $(arg x) -y $(arg y) -z $(arg z) -Y $(arg yaw)"/>
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
