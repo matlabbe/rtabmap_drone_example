@@ -90,6 +90,9 @@ catkin_make
 
 ```
 
+#### Issue with PX4 v1.8.2
+* With melodic version, PX4 will always lose track of the altitude in the first 5 minutes of the simulation. We have to manually with L1-L2 increase back the altitude of the drone a couple of times until PX4 restarts to correctly adjust the altitude to our setpoint (1.5m). It seems that issue won't re-happen another time during the same simulation (tested at least 20 min after the issue). The bug can be seen at 3:56 in the overview video.
+
 ## Usage
 
 ```
@@ -105,5 +108,3 @@ rosrun rtabmap_drone_example offboard
 
 ![](https://raw.githubusercontent.com/matlabbe/rtabmap_drone_example/master/doc/example.jpg)
 
-## Issues
-* With melodic version, PX4 will always lose track of the altitude in the first 5 minutes of the simulation. We have to manually with L1-L2 increase back the altitude of the drone a couple of times until PX4 restarts to correctly adjust the altitude to our setpoint (1.5m). It seems that issue won't re-happen another time during the same simulation (tested at least 20 min after the issue).
