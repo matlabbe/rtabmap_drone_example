@@ -3,7 +3,7 @@
 
 Overview video (click to watch on Youtube):
 
-[![Youtube](https://i.imgur.com/UKLtD7L.gif)](https://youtu.be/3CKtu95TJf4)
+[![Youtube](https://i.imgur.com/UKLtD7L.gif)](https://youtu.be/A487ybS7E4E)
 
 ## Dependencies
 
