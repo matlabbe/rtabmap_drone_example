@@ -3,6 +3,7 @@
    
     <arg name="localization" default="false"/>
     <arg name="rtabmapviz"   default="true"/>
+    <arg name="ground_truth" default="false"/>
     
     <arg     if="$(arg localization)" name="pre_args" default=""/>
     <arg unless="$(arg localization)" name="pre_args" default="-d"/>
@@ -24,7 +25,7 @@
     <param name="/rtabmap/rtabmap/latch" value="false"/> <!-- For some reason, if we latch grid_map, the global costmap inflation layer will create holes on robot path. To avoid holes, republish grid_map on each update (latching disabled). -->
     <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
       <arg name="localization"      value="$(arg localization)"/>
-      <arg name="args"              value="$(arg pre_args) --Optimizer/GravitySigma 0.1 --Vis/FeatureType 10 --Kp/DetectorStrategy 10 --Grid/MapFrameProjection true --NormalsSegmentation false --Grid/MaxGroundHeight 1 --Grid/MaxObstacleHeight 1.6" /> 
+      <arg name="args"              value="$(arg pre_args) --Optimizer/GravitySigma 0.1 --Vis/FeatureType 10 --Kp/DetectorStrategy 10 --Grid/MapFrameProjection true --NormalsSegmentation false --Grid/MaxGroundHeight 1 --Grid/MaxObstacleHeight 1.6 --RGBD/StartAtOrigin true" />
       <arg name="rtabmapviz"        value="$(arg rtabmapviz)" /> 
       <arg name="frame_id"          value="base_link" />
       <arg name="odom_guess_frame_id" value="base_link_stabilized" />
@@ -34,6 +35,8 @@
       <arg name="imu_topic"         value="/body_imu/data"/>
       <arg name="wait_imu_to_init"  value="true"/>
       <arg name="approx_sync"       value="true"/>
+      <arg if="$(arg ground_truth)" name="ground_truth_frame_id" value="world"/>
+      <arg if="$(arg ground_truth)" name="ground_truth_base_frame_id" value="base_link_gt"/>
     </include>
     
     <!-- Costmap -->
@@ -71,4 +74,12 @@
     <node pkg="teleop_twist_joy" type="teleop_node" name="teleop_node" output="screen">
         <param name="autorepeat_rate" value="5"/>
     </node>
+
+    <!-- Ground truth -->
+  <node if="$(arg ground_truth)" pkg="tf" type="static_transform_publisher" name="worldtomap_broadcaster" args="0 0 0 0 0 0 1 world map 100" />
+  <node if="$(arg ground_truth)" pkg="rtabmap_ros" type="gazebo_ground_truth.py" name="gazebo_ground_truth" output="screen">
+    <param name="frame_id"        value="world"/>
+    <param name="child_frame_id"  value="base_link_gt"/>
+    <param name="gazebo_frame_id" value="drone::base_link"/>
+  </node>
 </launch>
