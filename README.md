@@ -5,68 +5,104 @@ Overview video ([click](https://youtu.be/A487ybS7E4E) to watch on Youtube):
 
 [![Youtube](https://i.imgur.com/UKLtD7L.gif)](https://youtu.be/A487ybS7E4E)
 
-## Dependencies
+## Install
 
-Tested on ROS Melodic and ROS Noetic with the corresponding PX4 versions below.
-
+### Docker (recommended)
+To make it simple, create the following docker image (nvidia GPU required):
 ```bash
-sudo apt install \
-   ros-$ROS_DISTRO-gazebo-dev \
-   ros-$ROS_DISTRO-joy \
-   ros-$ROS_DISTRO-imu-complementary-filter \
-   ros-$ROS_DISTRO-teleop-twist-joy \
-   ros-$ROS_DISTRO-geographic-msgs \
-   ros-$ROS_DISTRO-dwa-local-planner \
-   libgeographic-dev \
-   geographiclib-tools \
-   libgstreamer1.0-dev
-
-# May need this on Melodic to avoid error about silt_gazebo 
-# and gstreamer (https://github.com/PX4/PX4-Autopilot/issues/13117):
-sudo apt-get install libgstreamer-plugins-base1.0-dev
-   
-# If rtabmap is not already built from source:
-sudo apt install ros-$ROS_DISTRO-rtabmap-ros
+git clone https://github.com/matlabbe/rtabmap_drone_example.git
+cd rtabmap_drone_example
+docker build -t rtabmap_drone_example -f docker/Dockerfile .
 ```
 
-### PX4 v1.12.3
-```bash
-cd ~
-git clone https://github.com/PX4/PX4-Autopilot.git
-cd PX4-Autopilot
-git checkout v1.12.3
-git submodule update --init --recursive
-sudo pip3 install numpy toml packaging jinja2 empy numpy
-make px4_sitl_default gazebo
-# (do ctrl-c in terminal to close gazebo)
-echo "source ~/PX4-Autopilot/Tools/setup_gazebo.bash ~/PX4-Autopilot ~/PX4-Autopilot/build/px4_sitl_default" >> ~/.bashrc
-echo "export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:~/PX4-Autopilot:~/PX4-Autopilot/Tools/sitl_gazebo" >> ~/.bashrc
-source ~/.bashrc
-
-cd ~/catkin_ws/src
-# To work with PX4/Firmware 1.12.3, mavros 1.8.0 or 1.9.0 releases should be used
-# (With mavros master branch there are a lot of "Detected jump back in time" TF errors)
-git clone https://github.com/mavlink/mavros.git && cd mavros && git checkout 1.9.0 && cd ..
-git clone https://github.com/SyrianSpock/realsense_gazebo_plugin.git
-
-sudo ~/catkin_ws/src/mavros/mavros/scripts/install_geographiclib_datasets.sh
-
-cd ~/catkin_ws
-catkin_make
-```
+### Host
+Follow instructions from [docker/Dockerfile](https://github.com/matlabbe/rtabmap_drone_example/blob/master/docker/Dockerfile) to install dependencies. 
 
 ## Usage
 
+### Docker (recommended)
+
+Launch the simulator:
+```bash
+XAUTH=/tmp/.docker.xauth
+touch $XAUTH
+xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
+
+docker run -it --rm \
+  --privileged \
+  --network=host \
+  --env="DISPLAY=$DISPLAY" \
+  --env="QT_X11_NO_MITSHM=1" \
+  --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+  --env="XAUTHORITY=$XAUTH" \
+  --volume="$XAUTH:$XAUTH" \
+  --runtime=nvidia \
+  rtabmap_drone_example \
+  roslaunch rtabmap_drone_example gazebo.launch
 ```
+
+Launch VSLAM:
+```bash
+XAUTH=/tmp/.docker.xauth
+touch $XAUTH
+xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
+
+docker run -it --rm \
+  --privileged \
+  --network=host \
+  --env="DISPLAY=$DISPLAY" \
+  --env="QT_X11_NO_MITSHM=1" \
+  --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+  --env="XAUTHORITY=$XAUTH" \
+  --volume="$XAUTH:$XAUTH" \
+  --runtime=nvidia \
+  rtabmap_drone_example \
+  roslaunch rtabmap_drone_example slam.launch
+```
+
+Launch rviz:
+```bash
+XAUTH=/tmp/.docker.xauth
+touch $XAUTH
+xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
+
+docker run -it --rm \
+  --privileged \
+  --network=host \
+  --env="DISPLAY=$DISPLAY" \
+  --env="QT_X11_NO_MITSHM=1" \
+  --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+  --env="XAUTHORITY=$XAUTH" \
+  --volume="$XAUTH:$XAUTH" \
+  --runtime=nvidia \
+  rtabmap_drone_example \
+  roslaunch rtabmap_drone_example rviz.launch
+```
+
+```bash
+# Arm and take off:
+docker run -it --rm \
+  --privileged \
+  --network=host \
+  rtabmap_drone_example \
+  rosrun rtabmap_drone_example offboard
+```
+
+### Host
+
+```bash
 roslaunch rtabmap_drone_example gazebo.launch
 roslaunch rtabmap_drone_example slam.launch
 roslaunch rtabmap_drone_example rviz.launch
 
-# Arm and take off:
 rosrun rtabmap_drone_example offboard
 ```
+
+
+## Control
+ * Autonomous control: use "2D Nav Goal" button in RVIZ to set a goal to reach
  * Manual control: If a joystick is plugged, you can send twists by holding L1 and moving the joysticks. Hold L1+L2 with left joystick down to land (be gentle to land smoothly), then hold left joystick in bottom-right position to disarm after the drone is on the ground.
- * Autonomous control: use "2D Nav Goal" button in RVIZ to set a goal to reach 
+ 
 
 ![](https://raw.githubusercontent.com/matlabbe/rtabmap_drone_example/master/doc/example.jpg)
 
