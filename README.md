@@ -79,8 +79,8 @@ docker run -it --rm \
   roslaunch rtabmap_drone_example rviz.launch
 ```
 
+Arm and take off:
 ```bash
-# Arm and take off:
 docker run -it --rm \
   --privileged \
   --network=host \
