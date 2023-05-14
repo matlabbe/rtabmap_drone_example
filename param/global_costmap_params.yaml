@@ -10,5 +10,5 @@ global_costmap:
     inflate_unkown: true
 
   plugins:
-    - {name: static_layer,    type: "rtabmap_ros::StaticLayer"}
+    - {name: static_layer,    type: "rtabmap_costmap_plugins::StaticLayer"}
     - {name: inflation_layer, type: "costmap_2d::InflationLayer"}

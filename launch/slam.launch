@@ -2,13 +2,13 @@
 <launch>
    
     <arg name="localization" default="false"/>
-    <arg name="rtabmapviz"   default="true"/>
+    <arg name="rtabmap_viz"   default="true"/>
     <arg name="ground_truth" default="false"/>
     
     <arg     if="$(arg localization)" name="pre_args" default=""/>
     <arg unless="$(arg localization)" name="pre_args" default="-d"/>
    
-    <node pkg="nodelet" type="nodelet" name="imu_to_tf" args="standalone rtabmap_ros/imu_to_tf">
+    <node pkg="nodelet" type="nodelet" name="imu_to_tf" args="standalone rtabmap_util/imu_to_tf">
       <remap from="imu/data" to="/mavros/imu/data"/>
       <param name="fixed_frame_id" value="base_link_stabilized"/>
       <param name="base_frame_id" value="base_link"/>
@@ -20,10 +20,10 @@
 
     <!-- VSLAM -->
     <param name="/rtabmap/rtabmap/latch" value="false"/> <!-- For some reason, if we latch grid_map, the global costmap inflation layer will create holes on robot path. To avoid holes, republish grid_map on each update (latching disabled). -->
-    <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
+    <include file="$(find rtabmap_launch)/launch/rtabmap.launch">
       <arg name="localization"      value="$(arg localization)"/>
       <arg name="args"              value="$(arg pre_args) --Optimizer/GravitySigma 0.1 --Vis/FeatureType 10 --Kp/DetectorStrategy 10 --Grid/MapFrameProjection true --NormalsSegmentation false --Grid/MaxGroundHeight 1 --Grid/MaxObstacleHeight 1.6 --RGBD/StartAtOrigin true" />
-      <arg name="rtabmapviz"        value="$(arg rtabmapviz)" /> 
+      <arg name="rtabmap_viz"        value="$(arg rtabmap_viz)" />
       <arg name="frame_id"          value="base_link" />
       <arg name="odom_guess_frame_id" value="base_link_stabilized" />
       <arg name="rgb_topic"         value="/r200/camera/color/image_raw" />
@@ -37,7 +37,7 @@
     </include>
     
     <!-- Costmap -->
-    <node pkg="nodelet" type="nodelet" name="camera_points_xyz" args="standalone rtabmap_ros/point_cloud_xyz">
+    <node pkg="nodelet" type="nodelet" name="camera_points_xyz" args="standalone rtabmap_util/point_cloud_xyz">
       <remap from="depth/image"       to="/r200/camera/depth/image_raw"/>
       <remap from="depth/camera_info" to="/r200/camera/depth/camera_info"/>
       <remap from="cloud"             to="camera_cloud" />
@@ -58,10 +58,10 @@
        <rosparam file="$(find rtabmap_drone_example)/param/local_costmap_params.yaml" command="load" />
        <rosparam file="$(find rtabmap_drone_example)/param/base_local_planner_params.yaml" command="load" />
     </node>
-   <node name="empty_voxels_markers" pkg="rtabmap_ros" type="voxel_markers" args="voxel_grid:=/move_base/local_costmap/voxel_layer/voxel_grid visualization_marker:=/voxels_empty">
+   <node name="empty_voxels_markers" pkg="rtabmap_costmap_plugins" type="voxel_markers" args="voxel_grid:=/move_base/local_costmap/voxel_layer/voxel_grid visualization_marker:=/voxels_empty">
        <param name="cell_type" value="0"/>
    </node>
-   <node name="marked_voxels_markers" pkg="rtabmap_ros" type="voxel_markers" args="voxel_grid:=/move_base/local_costmap/voxel_layer/voxel_grid visualization_marker:=/voxels_marked" />
+   <node name="marked_voxels_markers" pkg="rtabmap_costmap_plugins" type="voxel_markers" args="voxel_grid:=/move_base/local_costmap/voxel_layer/voxel_grid visualization_marker:=/voxels_marked" />
 
     <!-- joystick -->
     <rosparam file="$(find rtabmap_drone_example)/config/joy_config.yaml" />
@@ -74,7 +74,7 @@
 
     <!-- Ground truth -->
   <node if="$(arg ground_truth)" pkg="tf" type="static_transform_publisher" name="worldtomap_broadcaster" args="0 0 0 0 0 0 1 world map 100" />
-  <node if="$(arg ground_truth)" pkg="rtabmap_ros" type="gazebo_ground_truth.py" name="gazebo_ground_truth" output="screen">
+  <node if="$(arg ground_truth)" pkg="rtabmap_util" type="gazebo_ground_truth.py" name="gazebo_ground_truth" output="screen">
     <param name="frame_id"        value="world"/>
     <param name="child_frame_id"  value="base_link_gt"/>
     <param name="gazebo_frame_id" value="drone::base_link"/>

@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   rtabmap_ros
   std_msgs
   geometry_msgs
+  tf
 )
 
 ## System dependencies are found with CMake's conventions

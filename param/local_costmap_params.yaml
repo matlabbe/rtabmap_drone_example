@@ -16,7 +16,7 @@ local_costmap:
   footprint_padding: 0.05
   
   plugins:
-   - {name: voxel_layer,     type: "rtabmap_ros::VoxelLayer"}
+   - {name: voxel_layer,     type: "rtabmap_costmap_plugins::VoxelLayer"}
    - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
 
   voxel_layer:

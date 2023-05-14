@@ -56,7 +56,7 @@
   <build_depend>rtabmap_ros</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>geometry_msgs</build_depend>
-  <build_depend>tf2</build_depend>
+  <build_depend>tf</build_depend>
 
   <run_depend>mavros</run_depend>
   <run_depend>move_base</run_depend>
@@ -65,7 +65,7 @@
   <run_depend>rtabmap_ros</run_depend>
   <run_depend>std_msgs</run_depend>
   <run_depend>geometry_msgs</run_depend>
-  <run_depend>tf2</run_depend>
+  <run_depend>tf</run_depend>
 
   <run_depend>gazebo_plugins</run_depend>
   <run_depend>gazebo_ros</run_depend>
