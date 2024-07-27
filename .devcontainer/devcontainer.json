@@ -1,0 +1,19 @@
+{
+  "build": {
+    "dockerfile": "../docker/Dockerfile",
+    "context": ".."
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-vscode.cpptools-themes", "ms-vscode.cmake-tools"]
+    }
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/catkin_ws/src/rtabmap_drone_example,type=bind",
+  "workspaceFolder": "/catkin_ws",
+  "postAttachCommand": "echo 'Initialize catkin: source /ros_entrypoint.sh && cd /catkin_ws/src && catkin_init_workspace && cd /catkin_ws && catkin_make'",
+  "runArgs": ["--privileged"],
+  "mounts": ["source=/dev/input,target=/dev/input,type=bind,consistency=cached"]
+  
+  
+}

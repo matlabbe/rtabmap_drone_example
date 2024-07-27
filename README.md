@@ -15,6 +15,9 @@ cd rtabmap_drone_example
 docker build -t rtabmap_drone_example -f docker/Dockerfile .
 ```
 
+### Dev Container
+Open project in VSCode and click "Reopen in container". The image will be automatically built.
+
 ### Host
 Follow instructions from [docker/Dockerfile](https://github.com/matlabbe/rtabmap_drone_example/blob/master/docker/Dockerfile) to install dependencies. 
 
@@ -86,6 +89,31 @@ docker run -it --rm \
   --network=host \
   rtabmap_drone_example \
   rosrun rtabmap_drone_example offboard
+```
+
+### Dev Container
+Open 4 terminals:
+```bash
+/entrypoint.sh roslaunch rtabmap_drone_example gazebo.launch
+/entrypoint.sh roslaunch rtabmap_drone_example slam.launch
+/entrypoint.sh roslaunch rtabmap_drone_example rviz.launch
+
+/entrypoint.sh rosrun rtabmap_drone_example offboard
+```
+To edit and use mounted code, init catkin workspace with:
+```
+source /ros_entrypoint.sh && cd /catkin_ws/src && catkin_init_workspace && cd /catkin_ws && catkin_make
+```
+then you will have to manually do what `/entrypoint.sh` does, but sourcing `/catkin_ws/devel/setup.bash` before setting the env variables:
+```
+source /opt/ros/noetic/setup.bash
+source /catkin_ws/devel/setup.bash
+source /usr/local/px4/Tools/setup_gazebo.bash /usr/local/px4 /usr/local/px4/build/px4_sitl_default
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/usr/local/px4:/usr/local/px4/Tools/sitl_gazebo
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/catkin_ws/src/rtabmap_drone_example/models
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/opt/ros/noetic/share/realsense_gazebo_plugin/models
+
+roslaunch ...
 ```
 
 ### Host
