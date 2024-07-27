@@ -33,7 +33,7 @@ RUN git clone https://github.com/PX4/PX4-Autopilot.git &&\
     cd PX4-Autopilot && \
     git checkout v1.12.3 && \
     git submodule update --init --recursive && \
-    make -j8 px4_sitl_default gazebo && \
+    HEADLESS=1 make -j8 px4_sitl_default gazebo && \
     make px4_sitl_default install && \
     cd && \
     rm -rf PX4-Autopilot
