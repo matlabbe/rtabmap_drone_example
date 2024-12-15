@@ -70,7 +70,6 @@
   <run_depend>gazebo_plugins</run_depend>
   <run_depend>gazebo_ros</run_depend>
   <run_depend>gazebo_ros_control</run_depend>
-  <run_depend>drone_description</run_depend>
   <run_depend>xacro</run_depend>
 
   <!-- The export tag contains other, unspecified, tags -->

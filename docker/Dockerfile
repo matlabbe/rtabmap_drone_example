@@ -59,6 +59,9 @@ COPY . /root/catkin_ws/src/rtabmap_drone_example
 
 RUN source /ros_entrypoint.sh && \
     cd ~/catkin_ws && \
+    apt update && \
+    rosdep update && \
+    rosdep install -y -i --from-paths src/rtabmap_drone_example && \
     catkin_make -j8 -DCMAKE_INSTALL_PREFIX=/opt/ros/noetic install && \
     cd && \
     rm -rf ~/catkin_ws
