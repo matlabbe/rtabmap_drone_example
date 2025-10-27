@@ -1,0 +1,31 @@
+{
+    "build": {
+      "context": "../..",
+      "dockerfile": "Dockerfile",
+      "pull": true
+    },
+    "remoteUser": "vscode",
+    "customizations": {
+        "vscode": {
+          "extensions": [
+            "ms-vscode.cpptools-themes",
+            "ms-vscode.cmake-tools",
+            "ms-vscode.cpptools-extension-pack",
+            "ms-azuretools.vscode-docker",
+            "ms-python.python",
+            "KevinRose.vsc-python-indent"
+        ]
+        }
+      },
+    "settings": {
+      "python.autoComplete.extraPaths": [
+        "/opt/ros/humble/lib/python3/dist-packages"
+      ],
+      "terminal.integrated.defaultProfile.linux": "bash"
+    },
+    "workspaceMount": "source=${localWorkspaceFolder},target=/home/vscode/ros2_ws/src/rtabmap_drone_example,type=bind",
+    "workspaceFolder": "/home/vscode/ros2_ws/src/rtabmap_drone_example",
+    "postCreateCommand": "cd ~/PX4-Autopilot && make -j6 px4_sitl && cd ~/ros2_ws && source /opt/ros/humble/setup.bash && export MAKEFLAGS=\"-j6\" && colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release --parallel-workers 2",
+    "postStartCommand": "MicroXRCEAgent udp4 -p 8888",
+    "runArgs": ["--privileged", "--gpus", "all", "--runtime=nvidia", "--network=host", "-v", "/dev/input:/dev/input", "-e", "DISPLAY=${env:DISPLAY}", "-v", "/tmp/.X11-unix:/tmp/.X11-unix"]
+}

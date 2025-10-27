@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${default}",
+                "/opt/ros/humble/include/**",
+                "/home/vscode/ros2_ws/install/px4_msgs/include/px4_msgs",
+                "/home/vscode/ros2_ws/install/px4_ros_com/include",
+                "/usr/include/eigen3"
+            ],
+            "defines": [],
+            "cStandard": "c17",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-clang-x64",
+            "compilerPath": "/usr/bin/g++"
+        }
+    ],
+    "version": 4
+}

@@ -1,17 +1,18 @@
 # ps4
-teleop_node:
-    axis_linear:  # Forward/Back
-      x: 4
-      y: 3
-      z: 1
-    scale_linear:
-      x: 1
-      y: 0.5
-      z: 1
+teleop_twist_joy_node:
+    ros__parameters:
+        axis_linear:  # Forward/Back
+          x: 4
+          y: 3
+          z: 1
+        scale_linear:
+          x: 1.0
+          y: 0.5
+          z: 1.0
 
-    axis_angular:  # Turn Left/Right
-      yaw: 0
-    scale_angular:
-      yaw: 1
+        axis_angular:  # Turn Left/Right
+          yaw: 0
+        scale_angular:
+          yaw: 1.0
 
-    enable_button: 4  # Trigger
+        enable_button: 4  # Trigger

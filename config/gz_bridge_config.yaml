@@ -1,0 +1,40 @@
+- gz_topic_name: "/clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  direction: GZ_TO_ROS 
+  qos_profile: CLOCK
+
+- ros_topic_name: "/camera/rgb/image"
+  gz_topic_name: "/world/apt/model/x500_depth_0/link/camera_link/sensor/IMX214/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS 
+  qos_profile: SENSOR_DATA
+
+- ros_topic_name: "/camera/rgb/camera_info"
+  gz_topic_name: "/world/apt/model/x500_depth_0/link/camera_link/sensor/IMX214/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS 
+  qos_profile: SENSOR_DATA
+
+- ros_topic_name: "/camera/depth/image"
+  gz_topic_name: "/depth_camera"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS 
+  qos_profile: SENSOR_DATA
+
+- ros_topic_name: "/camera/depth/camera_info"
+  gz_topic_name: "/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS 
+  qos_profile: SENSOR_DATA
+
+- ros_topic_name: "/imu/data_raw"
+  gz_topic_name: "/world/apt/model/x500_depth_0/link/base_link/sensor/imu_sensor/imu"
+  ros_type_name: "sensor_msgs/msg/Imu"
+  gz_type_name: "gz.msgs.IMU"
+  direction: GZ_TO_ROS 
+  qos_profile: SENSOR_DATA
