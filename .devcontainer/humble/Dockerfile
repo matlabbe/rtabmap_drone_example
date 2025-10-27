@@ -45,10 +45,6 @@ RUN echo "source /usr/share/bash-completion/completions/git" >> .bashrc
 RUN git clone https://github.com/PX4/PX4-Autopilot.git --recursive && \
     bash ./PX4-Autopilot/Tools/setup/ubuntu.sh
 
-RUN cd ros2_ws/src && \
-    git clone https://github.com/PX4/px4_msgs.git && \
-    git clone https://github.com/PX4/px4_ros_com.git
-
 RUN sudo apt update && \
     sudo apt install -y \
     ros-humble-ros-gzharmonic \
@@ -61,17 +57,33 @@ RUN sudo apt update && \
     ros-humble-teleop-twist-joy \
     ros-humble-rqt-reconfigure
 
+RUN source /opt/ros/humble/setup.bash && \
+    cd ros2_ws/src && \
+    git clone https://github.com/PX4/px4_msgs.git && \
+    git clone https://github.com/PX4/px4_ros_com.git && \
+    # Add rtabmap_costmap_plugins (not yet released as binaries)
+    git clone https://github.com/introlab/rtabmap_ros && \
+    mv rtabmap_ros/rtabmap_costmap_plugins . && \
+    rm -rf rtabmap_ros && \
+    cd .. && \
+    colcon build && \
+    rm -rf build src/*
+
 RUN echo "source ~/ros2_ws/install/setup.bash" >> .bashrc && \
     echo "export RCUTILS_LOGGING_USE_STDOUT=1" >> .bashrc && \
     echo "export RCUTILS_LOGGING_BUFFERED_STREAM=1" >> .bashrc && \
     echo "export RCUTILS_COLORIZED_OUTPUT=1" >> .bashrc
 
 # copy our world in PX4 repo
-COPY --chown=${USER_GID}:${USER_GID} models/apt ~/workspace/PX4-Autopilot/Tools/simulation/gz/models/apt
-COPY --chown=${USER_GID}:${USER_GID} worlds/apt.sdf ~/workspace/PX4-Autopilot/Tools/simulation/gz/worlds/apt.sdf
+COPY --chown=${USER_GID}:${USER_GID} models/apt ./PX4-Autopilot/Tools/simulation/gz/models/apt
+COPY --chown=${USER_GID}:${USER_GID} worlds/apt.sdf ./PX4-Autopilot/Tools/simulation/gz/worlds/apt.sdf
 
 # copy modified OakD-Lite model
-COPY --chown=${USER_GID}:${USER_GID} models/OakD-Lite ~/workspace/PX4-Autopilot/Tools/simulation/gz/models/OakD-Lite
+COPY --chown=${USER_GID}:${USER_GID} models/OakD-Lite ./PX4-Autopilot/Tools/simulation/gz/models/OakD-Lite
 
 # copy our modified 4002_gz_x500_depth px4 config to enable vision pose (disable GPS)
-COPY --chown=${USER_GID}:${USER_GID} config/4002_gz_x500_depth ~/workspace/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/airframes/4002_gz_x500_depth
+COPY --chown=${USER_GID}:${USER_GID} config/4002_gz_x500_depth ./PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/airframes/4002_gz_x500_depth
+
+# build PX4
+RUN cd ./PX4-Autopilot && \
+    make -j6 px4_sitl

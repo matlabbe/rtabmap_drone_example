@@ -25,7 +25,7 @@
     },
     "workspaceMount": "source=${localWorkspaceFolder},target=/home/vscode/ros2_ws/src/rtabmap_drone_example,type=bind",
     "workspaceFolder": "/home/vscode/ros2_ws/src/rtabmap_drone_example",
-    "postCreateCommand": "cd ~/PX4-Autopilot && make -j6 px4_sitl && cd ~/ros2_ws && source /opt/ros/humble/setup.bash && export MAKEFLAGS=\"-j6\" && colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release --parallel-workers 2",
+    "postCreateCommand": "cd ~/ros2_ws && colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release",
     "postStartCommand": "MicroXRCEAgent udp4 -p 8888",
     "runArgs": ["--privileged", "--gpus", "all", "--runtime=nvidia", "--network=host", "-v", "/dev/input:/dev/input", "-e", "DISPLAY=${env:DISPLAY}", "-v", "/tmp/.X11-unix:/tmp/.X11-unix"]
 }
