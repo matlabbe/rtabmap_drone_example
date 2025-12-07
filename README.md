@@ -1,5 +1,5 @@
 # rtabmap_drone_example
-2D navigation example of a drone using [move_base](http://wiki.ros.org/move_base) with [mavros](http://wiki.ros.org/mavros)/[px4](https://github.com/PX4/PX4-Autopilot) and [rtabmap](wiki.ros.org/rtabmap_ros) visual SLAM. 
+2D navigation example of a drone using [move_base](http://wiki.ros.org/move_base) with [mavros](http://wiki.ros.org/mavros)/[px4](https://github.com/PX4/PX4-Autopilot) and [rtabmap](https://wiki.ros.org/rtabmap_ros) visual SLAM. 
 
 For the ROS2 example with nav2, go on the [ros2](https://github.com/matlabbe/rtabmap_drone_example/tree/ros2) branch.
 
