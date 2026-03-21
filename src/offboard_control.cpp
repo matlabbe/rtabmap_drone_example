@@ -79,7 +79,7 @@ public:
 		
 		// Subscription to get the current vehicle position
         local_pos_subscriber_ = this->create_subscription<px4_msgs::msg::VehicleLocalPosition>(
-            "/fmu/out/vehicle_local_position_v1", rclcpp::QoS(10).best_effort(), std::bind(&OffboardControl::local_pos_callback, this, std::placeholders::_1));
+            "/fmu/out/vehicle_local_position", rclcpp::QoS(10).best_effort(), std::bind(&OffboardControl::local_pos_callback, this, std::placeholders::_1));
 	
 		status_subscriber_ = this->create_subscription<px4_msgs::msg::VehicleStatus>(
             "/fmu/out/vehicle_status_v1", rclcpp::QoS(10).best_effort(), std::bind(&OffboardControl::vehicle_status_callback, this, std::placeholders::_1));
@@ -291,7 +291,7 @@ private:
     }
 
 	void joy_callback(const sensor_msgs::msg::Joy::SharedPtr msg){
-		if(msg->buttons[5] == 1)
+		if(msg->buttons[10] == 1)
 		{
 			// When holding right trigger, accept velocity in Z
 			velocity2d_ = false;

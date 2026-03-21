@@ -163,6 +163,15 @@ def launch_setup(context, *args, **kwargs):
                 'base_link', 'middle'        # frame-id child-frame-id
             ],
         ),
+        Node(
+            package='tf2_ros', executable='static_transform_publisher', output='screen',
+            parameters=[{'use_sim_time': use_sim_time}],
+            arguments=[
+                '0', '0', '0',            # x y z
+                '0', '0', '0',               # roll pitch yaw
+                'base_link', 'x500_depth_0/base_link/imu_sensor'        # frame-id child-frame-id
+            ],
+        ),
         
         Node(
             package='rtabmap_drone_example', executable='ros_odometry_to_vehicle_odometry', output='screen',

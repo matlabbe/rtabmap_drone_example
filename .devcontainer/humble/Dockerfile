@@ -42,8 +42,11 @@ RUN mkdir -p ros2_ws/src
 RUN echo "source /opt/ros/humble/setup.bash" >> .bashrc
 RUN echo "source /usr/share/bash-completion/completions/git" >> .bashrc
 
-RUN git clone https://github.com/PX4/PX4-Autopilot.git --recursive && \
-    bash ./PX4-Autopilot/Tools/setup/ubuntu.sh
+RUN git clone https://github.com/PX4/PX4-Autopilot.git && \
+    cd PX4-Autopilot && \
+    git checkout f3979c0fcf89d08729bcb3ada57286fcd3b0ff2f && \
+    git submodule update --recursive -i && \
+    bash ./Tools/setup/ubuntu.sh
 
 RUN sudo apt update && \
     sudo apt install -y \
@@ -60,7 +63,13 @@ RUN sudo apt update && \
 RUN source /opt/ros/humble/setup.bash && \
     cd ros2_ws/src && \
     git clone https://github.com/PX4/px4_msgs.git && \
+    cd px4_msgs && \
+    git checkout 49a0f6c52cf86948e46e5df8a7b61e33319c9ed2 && \
+    cd .. && \
     git clone https://github.com/PX4/px4_ros_com.git && \
+    cd px4_ros_com && \
+    git checkout 86e9aeb20e55a4673fa8a9f1c29ea06a6c5ad1af && \
+    cd .. && \
     # Add rtabmap_costmap_plugins (not yet released as binaries)
     git clone https://github.com/introlab/rtabmap_ros && \
     mv rtabmap_ros/rtabmap_costmap_plugins . && \
