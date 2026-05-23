@@ -18,6 +18,10 @@ docker build -t rtabmap_drone_example -f docker/Dockerfile .
 ```
 
 ### Dev Container
+Make sure docker has permission to access your host machine's X11 display server:
+```
+xhost +local:docker
+```
 Open project in VSCode and click "Reopen in container". The image will be automatically built.
 
 ### Host
